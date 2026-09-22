@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+._*
+
+# Editors
+.idea/
+.vscode/
+*.swp
+
+# Agent state that is machine-local, not repo policy
+.claude/settings.local.json
+
+# Never, even though nothing here reads one
+.env
+.env.*

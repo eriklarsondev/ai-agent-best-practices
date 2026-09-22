@@ -1,0 +1,91 @@
+# Comments
+
+**Open when:** you're about to write a comment or a docstring.
+**Skip if:** the file has an obvious convention — follow that instead.
+
+## The rule
+
+Comments explain **why**. Code already explains what. A comment that restates the line above
+it is a maintenance liability that will eventually be wrong.
+
+**Never document your activity.** `// Added validation`, `// Fixed the bug`, `// Updated per
+request`, `// NEW:`, `// Changed from map to filter` — git owns history, and these read as
+noise the moment the change is merged.
+
+## Never
+
+| Never | Why |
+| --- | --- |
+| Activity or changelog comments | Git has it. They're stale on merge |
+| Giant commented-out code blocks | Delete it. Git has it |
+| Step-by-step tour guides (`// Step 1: validate`) | The code is the steps |
+| Restating the line (`// increment i`) | Zero information, nonzero cost |
+| Banner separators, ASCII art, decorative headers | Noise in every read, forever |
+| Docstrings that just re-say the signature | `@param name - The name.` tells no one anything |
+| `TODO` / `FIXME` you weren't asked to leave | Unfinished work marked in a comment reads as finished work in your report |
+| A comment you've just invalidated | A wrong comment is worse than none — update or delete it |
+
+## By layer
+
+These are defaults for when the repo has no convention. **If it has one, follow it** — see
+[`consistency.md`](consistency.md).
+
+| Layer | Policy |
+| --- | --- |
+| **Server-side functions** | A doc comment in the language's own convention, on the exported surface. Trivial private helpers get nothing |
+| **Client-side code** | Minimal. Prop and state types are the documentation. Comment only non-obvious behavior |
+| **Infra (Terraform, k8s, CI, Dockerfiles)** | Minimal. Resource names and structure are self-documenting |
+| **Tests** | The test name is the documentation. Comment only non-obvious fixture setup |
+| **Config** | Only where a value is surprising, and then just the reason |
+
+### Server-side: use the language's own convention
+
+JSDoc for JS/TS, PHPDoc for PHP, docstrings for Python, GoDoc for Go, rustdoc for Rust,
+Javadoc for Java. Never import one language's habits into another.
+
+How much to write depends on the type system. **Statically typed** — never restate a type;
+document what the signature can't say: units, nullability semantics, side effects, thrown
+errors, idempotency, ordering. **Dynamically typed** — the `@param` / `@return` type tags are
+real information; write them.
+
+No tag that restates the parameter name (`@param $name The name.`). If every tag would be
+redundant, the one-line summary **is** the correct doc comment.
+
+Formats and worked examples per language:
+[`../reference/doc-comments.md`](../reference/doc-comments.md).
+
+### Infra
+
+Never this:
+
+```hcl
+# Create the S3 bucket
+resource "aws_s3_bucket" "assets" {
+```
+
+Comment the constraint that isn't visible:
+
+```hcl
+# Pinned to 5.x — 6.0 renames the lifecycle block and breaks the state migration.
+```
+
+Same for CI and Dockerfiles: comment the version pin, the ordering dependency, the cache
+trick — not the step.
+
+## When a comment is warranted
+
+Only when functionality is genuinely complicated. Concretely:
+
+- A constraint imposed by an external system — `// vendor API rejects batches over 100`
+- A workaround, with the reason and a link — `// Safari 17 fires this twice; see #1423`
+- Deliberately unusual math or an algorithm, with the invariant stated
+- A security subtlety — why this check must run before that one
+- A performance choice that looks wrong — `// linear scan beats a Map here; n < 8 in practice`
+
+**The test:** could a competent reader work this out from the code in under a minute? If yes,
+no comment.
+
+## Density
+
+Match the file you're in. Most production code is sparse. Arriving in a file with three
+comments in 400 lines and adding eight is a style change nobody asked for.
