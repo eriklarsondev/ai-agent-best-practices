@@ -62,7 +62,7 @@ Refresh tokens now rotate on every use, and a replayed token fails closed instea
 - Migration `0042_token_family.sql` adds a nullable `token_family` column. No backfill needed — rows populate on next refresh.
 
 #### Verification
-- `mypy auth/` and `ruff check auth/` clean; `rg -n 'refresh_token\('` confirms all 4 call sites updated. Added `tests/auth/test_refresh.py` (3 cases) but did not run it — `pytest tests/auth/test_refresh.py -q`. Worth exercising login on two devices, then refreshing the older session.
+- `rg -n 'refresh_token\('` confirms all 4 call sites updated. Added `tests/auth/test_refresh.py` (3 cases); nothing was run — `mypy auth/ && ruff check auth/`, then `pytest tests/auth/test_refresh.py -q`. Worth exercising login on two devices, then refreshing the older session.
 ```
 
 ## Adapting the grouping

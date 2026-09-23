@@ -3,6 +3,10 @@
 **Open when:** before running a command whose output size you can't predict.
 **Skip if:** the command is already bounded (`-l`, `--stat`, `head`, a known-short script).
 
+Mostly this applies to `rg` and git, since those are the only things you run
+([`running-things.md`](running-things.md)). The rest of this file is for the exception: the
+developer asked you to run something.
+
 ## The rule
 
 Every command is 100k tokens until you've bounded it. Bound it at the call site — you can't

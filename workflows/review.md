@@ -3,6 +3,10 @@
 **Open when:** reviewing changes — yours before reporting, or someone else's.
 **Skip if:** the diff is under ~20 lines and you've already read it.
 
+Reviewing a GitHub PR rather than a local branch? Same method; only the fetch differs, and
+the findings go to the developer, never into a PR comment —
+[`../practices/pull-requests.md`](../practices/pull-requests.md).
+
 ## 1. Shape before contents
 
 ```sh

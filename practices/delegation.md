@@ -3,23 +3,27 @@
 **Open when:** deciding whether to spawn subagents or parallelize.
 **Skip if:** the task touches files you've already located.
 
-## The break-even
+## When it's worth it
 
-A subagent costs you: your prompt (~200) + its final report (~500–3k). Everything it *reads*
-costs you nothing — that's the whole point. It runs its own window and hands back a conclusion.
+A subagent costs *your window* almost nothing — your prompt, plus its report. It costs *the
+bill* everything it reads, and it reads more than you would, because it has none of your
+context and has to rediscover the parts you already know.
 
-So delegate when the work it replaces would cost **more than ~10k tokens of your own reads**.
+So the test isn't "would this save me some reading?" It's **"can grep answer this at all?"**
+If it can, grep. If it genuinely can't, delegate.
 
 | Task | Call |
 | --- | --- |
-| "Where is `parseConfig` defined?" | Do it yourself — one grep |
-| "Read `src/auth/session.ts` lines 40–90" | Do it yourself |
-| "Which of our 40 route handlers skip auth?" | Delegate |
-| "Map how errors propagate across these 6 subsystems" | Delegate |
-| "Find every place we assume UTC" | Delegate |
+| "Where is `parseConfig` defined?" | Yourself — one grep |
+| "Read `src/auth/session.ts` lines 40–90" | Yourself |
+| "Which of our 40 handlers skip auth?" | Grep the decorator first; delegate only if there's no single pattern |
+| "Map how errors propagate across 6 subsystems" | Delegate — no grep expresses it |
+| "Find every place we assume UTC" | Delegate — the pattern is semantic, not lexical |
 | "Summarize this 4000-line file" | Delegate — the reading never enters your window |
 
-Rule of thumb: **delegate breadth, do depth yourself.**
+Rule of thumb: **grep first, delegate what grep can't express, do depth yourself.** If you can
+state the question precisely enough to put it in a subagent's prompt, you can usually state it
+precisely enough to `rg` for it.
 
 ## Write the deliverable into the prompt
 

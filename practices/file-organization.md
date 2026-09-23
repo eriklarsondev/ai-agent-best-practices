@@ -83,8 +83,11 @@ the change the developer asked for. Options, in order:
 2. If your change would add substantial new surface, extract **just that** into a new file.
 3. If the file genuinely needs splitting, say so in one sentence and let the developer decide.
 
-## Find the offenders
+## Find the offenders — only if asked
 
 ```sh
 rg --files -g '*.ts' -g '*.tsx' | xargs wc -l | sort -rn | head -20
 ```
+
+Only when they asked. Auditing a repo you were sent into for one change is a report nobody
+ordered.

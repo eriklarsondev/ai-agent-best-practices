@@ -76,7 +76,7 @@ If the repo already has a convention — flat `components/` with one file each, 
 atomic design, `.module.css` beside each component — match it. Framework and repo convention
 outrank this file. See [`consistency.md`](consistency.md).
 
-## Check the offenders
+## Check the offenders — only if asked
 
 ```sh
 rg --files -g '*.tsx' | xargs wc -l | sort -rn | head -15

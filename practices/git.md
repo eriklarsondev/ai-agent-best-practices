@@ -55,6 +55,12 @@ anything that exists on a remote · any force-push.
 These destroy uncommitted work irreversibly, and the work they destroy is usually the
 developer's, not yours.
 
+## On a team
+
+Never touch a branch you didn't create, never resolve a merge conflict by taking one side
+wholesale, and never rebase or force-push a branch someone else may have checked out. Full
+rules, plus PRs and CI: [`pull-requests.md`](pull-requests.md).
+
 ## Pull requests
 
 **Never open one.** Not as a convenience, not when the branch is obviously ready. Opening,

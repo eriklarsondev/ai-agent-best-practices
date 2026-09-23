@@ -1,84 +1,85 @@
-# Verification
+# Verification without execution
 
-**Open when:** after a change — **what** to check before you report.
+**Open when:** after a change — how to check it when you can't run anything.
 **Skip if:** nothing executable changed.
 
 First in the end-of-task chain: **verification** → [`handoff.md`](handoff.md) (what to say)
 → [`communication.md`](communication.md) (how to write it).
 
-## Where your job ends
-
-Prove the change is **statically sound**, cheaply. Then hand it to the developer to run.
+## Checking is reading, grepping, and honesty
 
 | You do | The developer does |
 | --- | --- |
-| Type check, compile, lint | Runs the test suite |
+| Re-read your own diff | Compiles, typechecks, lints |
+| Grep every call site you touched | Runs the test suite |
 | **Write** the tests | **Runs** the tests |
-| Grep every call site you changed | Runs the app |
-| Read the diff once | Decides it's right |
+| Name what you couldn't check | Decides it's right |
 
-**Don't execute tests. Don't run the app.** No `pytest`, no `go test`, no `npm test`, no
-dev servers, no browser automation, no E2E. No Docker — don't build, start, or restart
-containers. And never start the app on a spare port to dodge a conflict: a busy port means
-it's already running, and a second instance just creates a second source of truth.
-
-Writing a test is your job; confirming it passes is theirs.
+**Don't run the toolchain to grade yourself** — no `tsc`, `mypy`, `eslint`, `go build`, no
+test runner, dev server, Docker, or browser. Rules and reasoning:
+[`running-things.md`](running-things.md).
 
 Three reasons, in order of weight:
 
-1. **The developer re-verifies anyway.** They're the one who knows what correct looks like.
-   A green run from you doesn't remove a single step from their side — you paid for nothing.
-2. **A passing test you wrote and ran proves less than it appears.** If the same pass wrote
-   the code and the assertion and then graded them against each other, green mostly confirms
-   internal consistency. An independent runner is what makes it evidence.
-3. **Execution is the expensive, flaky part.** Suites need env, fixtures, services, and
-   ports you're guessing at; browser loops cost tens of thousands of tokens per attempt.
+1. **The developer re-verifies anyway.** They know what correct looks like. Nothing you run
+   removes a step from their side, so you paid for nothing.
+2. **Self-graded green proves less than it appears.** If one pass wrote the code, wrote the
+   assertion, and graded them against each other, passing mostly confirms internal
+   consistency. An independent runner is what makes it evidence.
+3. **Execution costs most exactly when your change is worst.** A single type error cascades
+   into thousands of lines you can't un-read; a browser loop is tens of thousands of tokens
+   per attempt. The worse the state, the bigger the bill.
 
 **Exception:** the developer explicitly asks you to run something. Then run it — bounded,
 once, output piped to `tail`.
 
-## What you can do instead
+## The three moves that replace it
 
-Static checks are cheap, deterministic, and often *more* complete than a test run:
+**1. Re-read the diff as if it were someone else's.** You wrote it from intent; read it from
+outside. Most of what a type checker would have caught — the wrong field name, the argument
+in the wrong position, the import that doesn't exist — is visible on the second read and
+invisible on the first.
+
+**2. Grep the blast radius.** Cheap, deterministic, and it catches things a test run misses:
 
 | Question | Check |
 | --- | --- |
-| Does it compile / typecheck? | Narrowest project scope, `2>&1 \| head -30` |
-| Does it lint? | The files you touched only |
-| Did I miss a call site? | `rg -n 'funcName\('` — finds every one, including those no test covers |
+| Did I miss a call site? | `rg -n 'funcName\('` — every one, including those no test covers |
 | Did the rename land everywhere? | `rg -n 'oldName'` returning nothing **is** the proof |
+| Does what I imported exist? | `rg -n 'export .*thingIImported'` in the source module |
 | Did I break a config contract? | `rg -n 'KEY_NAME'` across code, compose files, CI, `.env.example` |
-| Did I change a DB field? | Grep the migrations and serializers |
-| Is the new test actually wired in? | Grep the test path matches the runner's discovery pattern |
+| Did I change a DB field? | Grep the migrations and the serializers |
+| Is the new test wired in? | Grep that its path matches the runner's discovery pattern |
 
-Commands per stack: [`../reference/stack-commands.md`](../reference/stack-commands.md).
+**3. Name what you couldn't check.** Ranked, most-likely-wrong first. This is worth more than
+a green check you produced yourself, because it's the one thing the developer can't derive.
+
+Commands to hand over, per stack:
+[`../reference/stack-commands.md`](../reference/stack-commands.md).
 
 ## Writing the test is still your job
 
-Write it, and write it to fail for the right reason. You just don't get to watch it run.
-That raises the bar on the test itself:
+Write it, and write it to fail for the right reason. Not watching it run raises the bar on the
+test itself:
 
 - **Assert on behavior, not on implementation** you just wrote — an assertion mirroring your
   own code passes without proving anything.
 - **Name the case in the test name**, so a failure tells the developer what broke without
-  reading the body.
-- **Cover the path you couldn't check statically** — the error branch, the boundary, the
-  empty case.
-- **Never** mark it skipped, `xfail`, or `.only` to sidestep uncertainty. If you're unsure
-  it's right, say so in the handoff.
+  them reading the body.
+- **Cover what reading couldn't settle** — the error branch, the boundary, the empty case.
+- **Never** mark it skipped, `xfail`, or `.only` to sidestep uncertainty. Say so instead.
 
 ## Report honestly
 
-- Ran a static check, it passed → say which one, plainly.
-- Ran it, it failed → show the relevant slice.
-- Wrote tests → say that you wrote them **and did not run them**. Never phrase unrun tests
-  in a way that implies they passed.
-- Skipped a check → name it and why.
+- Grepped the call sites → say which pattern, and how many hits it returned.
+- Wrote tests → say you wrote them **and did not run them**. Never phrase unrun tests in a
+  way that implies they passed.
+- Couldn't check something → name it, don't omit it.
 
-"It compiles" is never a stand-in for "it works," and "I added tests" is never a stand-in
-for "the tests pass."
+You have no green to report. "It looks right" is not "it works," and "I added tests" is not
+"the tests pass" — so report what you actually did, which is reading and grepping.
 
 ## Then hand off
 
-Give them the exact command for the tests you wrote, plus what's worth exercising by hand.
+Give them the commands — checks first, then tests — plus what's worth exercising by hand.
 See [`handoff.md`](handoff.md).

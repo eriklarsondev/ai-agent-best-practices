@@ -48,16 +48,18 @@ line they pointed at:
 > That changes two other things I did on the same assumption — the retry guard in
 > `queue.py:88` and the test I wrote for it. Fixed both.
 
-## 6. Re-run the static checks, then map comments to changes
+## 6. Re-grep, then map comments to changes
 
-Typecheck and lint again — feedback edits break things as readily as original ones. Then give
-them one summary keyed to their comments, so they can verify without re-reading the diff:
+Feedback edits break things as readily as original ones — re-run the same greps and re-read
+the hunks you touched. Then give them one summary keyed to their comments, so they can verify
+without re-reading the diff:
 
 > - `auth.py:40` `>=` — fixed
 > - `auth.py:55` why clear the cache — answered below, no change
 > - `queue.py:88` mutex — done, plus the two dependent spots above
 >
-> `mypy` and `ruff` clean. Didn't re-run the suite.
+> Worth re-running `mypy auth/ && ruff check auth/` — three more lines changed since your
+> last look, and I haven't run anything.
 >
 > Why the cache clear: the session object caches the old token, so without it a refresh
 > returns the pre-rotation value on the next read.

@@ -45,10 +45,10 @@ retry around a logic error — come back, and cost more the second time.
 Smallest unique replacement. No drive-by refactoring, no reformatting: a 4-line diff reviews
 in seconds and makes the fix obvious. See [`../practices/editing.md`](../practices/editing.md).
 
-## 5. Check statically, then hand the repro back
+## 5. Check by reading, then hand the repro back
 
-Typecheck and lint the files you touched. If the fix changed a signature or a shared helper,
-`rg -n 'name\('` for call sites — that catches what a single test wouldn't. Details in
+Re-read the diff. If the fix changed a signature or a shared helper, `rg -n 'name\('` for
+call sites — that catches what a single test wouldn't. Details in
 [`../practices/verification.md`](../practices/verification.md).
 
 Then hand over the same command from step 1. It should now go green, and they're the ones who

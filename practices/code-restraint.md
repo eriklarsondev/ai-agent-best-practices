@@ -27,6 +27,7 @@ Two minutes of grep beats a duplicate implementation that drifts from the origin
 
 | Don't | Instead |
 | --- | --- |
+| A second way to do what the repo already does | The existing one, even if worse — [`consistency.md`](consistency.md) |
 | An abstraction for one call site | Write it inline. Abstract at the second or third use, when you know the shape |
 | Config options nobody requested | Hardcode it; make it configurable when someone asks |
 | A dependency to avoid ~20 lines | Write the 20 lines |
@@ -81,9 +82,9 @@ Before you report done:
 git status --short        # anything here you didn't intend?
 ```
 
-Remove debug logging you added, temporary scripts, `.bak`/`.orig` files, commented-out
-experiments, unused imports, and scratch notes. Put genuinely temporary work in a scratch
-directory outside the repo, not in the tree.
+Remove debug logging, temporary scripts, `.bak`/`.orig` files, commented-out experiments,
+unused imports, and scratch notes. Genuinely temporary work goes in a scratch directory
+outside the repo.
 
 ## Prefer deleting
 

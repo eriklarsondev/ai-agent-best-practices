@@ -40,11 +40,11 @@ against at every later step.
   authorization check ([`../practices/secure-coding.md`](../practices/secure-coding.md)).
   Before you call it done, state who may call it, what's validated, and what it leaks.
 
-## 5. Check statically, then hand the run over
+## 5. Check by reading, then hand the run over
 
-Compile/typecheck, lint the files you touched, and `rg -n 'name\('` every signature you
-changed. That's your side — see
-[`../practices/verification.md`](../practices/verification.md).
+Re-read the diff from outside, and `rg -n 'name\('` every signature you changed. That's your
+side — see [`../practices/verification.md`](../practices/verification.md). The typecheck goes
+into the handoff as command 1, not into your context.
 
 Cover the edges in the tests you wrote rather than by running anything: empty input, auth
 failure, the error branch you added. Those are exactly the paths a happy-path manual check

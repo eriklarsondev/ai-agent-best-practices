@@ -12,8 +12,7 @@ Three companions, each owning a slice this file doesn't repeat:
 ## Before the first write
 
 0. **Check where you are.** `git status --short && git branch --show-current`. Uncommitted
-   changes you didn't make, or `main` when the task implies a branch — say so before
-   editing, not at handoff.
+   changes you didn't make, or `main` when the task implies a branch — say so before editing.
 1. **Does it already exist?** `rg -n 'thingYouAreAboutToWrite'`. Duplicates drift.
 2. **What does the neighbour look like?** Read the closest sibling file — it settles naming,
    error handling, validation, and test shape in one read.
@@ -28,7 +27,8 @@ Three companions, each owning a slice this file doesn't repeat:
   changing: it doubles the token cost (write, then review) and buries the real change.
 - Rewriting a whole file is for genuinely replacing it. Three-line changes are three-line
   edits.
-- Don't reformat untouched lines. If the repo has a formatter, run it — on your files only.
+- Don't reformat untouched lines and don't run the formatter — match the file's style; their
+  pre-commit hook normalizes it ([`formatting.md`](formatting.md)).
 
 ## Don'ts that cost tokens and trust
 

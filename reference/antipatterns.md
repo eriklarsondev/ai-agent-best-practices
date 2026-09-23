@@ -11,6 +11,8 @@ Deltas are order of magnitude, not measurements.
 | Read a file to find one symbol | `rg -n 'symbol' path/` | 6k → 50 |
 | Re-read a file to confirm your edit applied | nothing; the tool already errors on failure | 6k → 0 |
 | Run a test suite yourself | write the test, hand over the exact command | 15k → 40 |
+| Run `tsc`/`mypy`/`eslint` to grade your own work | re-read the diff, grep the call sites, hand the command over | 5k–50k → 100 |
+| Loop: check, patch, check again | one careful read before you write | 4× → 1× |
 | `find . -name '*.py'` | `rg --files -g '*.py'` (respects ignore files) | 40k → 500 |
 | `ls -R` or `tree` at repo root | `rg --files \| head -40`, or glob the dir you care about | 100k+ → 300 |
 | `git diff` on a branch that touched a lockfile | `git --no-pager diff -- . ':(exclude)*lock*'` | 200k → 3k |
@@ -18,7 +20,7 @@ Deltas are order of magnitude, not measurements.
 | Read the whole 3000-line file to orient | grep the symbol lines for an outline, read one region | 40k → 1k |
 | Rewrite a file to change three lines | targeted replacement of a unique anchor | 12k → 200 |
 | Reformat untouched lines while editing | leave them; a 4-line diff reviews in seconds | 8k → 200 |
-| 30 sequential reads to answer "where is X used" | one subagent, deliverable = `file:line` list | 80k → 3k |
+| 30 sequential reads to answer "where is X used" | one grep that states the question; a subagent only if none can | 80k → 200 |
 | Spawn a subagent for a single known lookup | just read it; spawn overhead > the read | 4k → 300 |
 | Delegate a search *and* run it yourself | pick one | 2× → 1× |
 | Ask a clarifying question the repo answers | grep for it | one full turn → 100 |

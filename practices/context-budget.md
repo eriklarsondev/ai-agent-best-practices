@@ -3,30 +3,27 @@
 **Open when:** the task spans many files, or the transcript is getting long.
 **Skip if:** it's a single-file change.
 
-## Dollars vs. window
+## There's no number to hit
 
-| | Prompt caching helps? | Degrades your output? |
-| --- | --- | --- |
-| Dollar cost of re-sent tokens | Yes, a lot | No |
-| Context window occupancy | **No** | **Yes** |
+Don't track a budget, don't allocate percentages, and don't stop mid-task to work out what a
+turn cost. Accounting is its own kind of waste, and it makes you hesitant exactly where you
+should be decisive. Work the task — the rules here are behavioral, and following them is the
+whole discipline.
 
-A cached 40k-token file still occupies 40k tokens of working set. Optimize the window; the
-dollars mostly take care of themselves.
+One fact is worth holding, because it's the reason the rules point where they do: a token you
+*generated* — a command you ran, a file you opened, a subagent you spawned — is billed once
+at full price and again on every turn that carries it afterwards. Caching makes re-sent
+context cheap; it never makes a wasted read free. The cheapest move is the one you didn't
+make.
 
 Caching does impose one structural rule: **append, don't rewrite**. Reordering or editing
 earlier context invalidates the cache from that point on. Add at the end.
 
-## A rough allocation
+## When discovery is running long
 
-For a task of any size, aim to spend:
-
-- **≤ 30% on discovery** (search, read, orient). Past that, you're exploring, not working.
-- **~40% on the work itself** (edits, reasoning, verification output).
-- **≥ 30% held in reserve.** Quality falls off well before the window is full; leave room for
-  the failure you haven't hit yet.
-
-If discovery is blowing past 30%, the answer is almost always delegation
-(see [`delegation.md`](delegation.md)) or a state file, not more reading.
+You'll notice it well before you could measure it: three files read and nothing changed yet, a
+plan growing faster than the change it plans, the same file opened twice. The answer is never
+more reading — it's a sharper grep, a state file on disk, or a question for the developer.
 
 ## Put long-lived state on disk, not in context
 
@@ -39,9 +36,9 @@ scratch/migration.md
   - [ ] src/api/session.ts
 ```
 
-Three reasons: it survives context compaction, it costs ~200 tokens to re-read instead of
-re-deriving, and the user can see the state. Update it as you go; don't reconstruct progress
-from the transcript.
+Three reasons: it survives context compaction, re-reading it is far cheaper than re-deriving
+it, and the user can see the state. Update it as you go; don't reconstruct progress from the
+transcript.
 
 ## Progressive disclosure
 
@@ -57,7 +54,8 @@ open the file to find out, the index is doing no work.
 - You've read three files and changed nothing.
 - You're opening a file you already opened.
 - A command's output is longer than the conclusion you'll draw from it.
-- You're about to start a server or a browser to check your own work.
+- You're about to run something — a checker, a build, a server, a browser — to grade your own
+  work. That's the developer's two seconds and your five figures.
 - You're re-explaining a decision the developer already made.
 - You're writing a plan longer than the work it plans.
 

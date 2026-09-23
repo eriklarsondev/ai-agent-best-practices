@@ -7,9 +7,9 @@ Start from [`../templates/AGENTS.md`](../templates/AGENTS.md).
 
 ## The economics
 
-This file is loaded on **every turn of every session, forever**. A 3000-token `AGENTS.md`
-costs more over a month than every file an agent will ever read. Budget it like the
-always-on cost it is: **one page, ~1000 tokens, hard ceiling.**
+This file is loaded on **every turn of every session, forever**. A long one costs more over a
+month than every file an agent will ever read. Keep it to **one page** — if it doesn't fit on
+a screen, it's carrying something that belongs in a leaf.
 
 It earns that cost by preventing wrong guesses. One line that stops an agent running a
 12-minute suite, or inventing a helper that already exists, pays for the whole file.

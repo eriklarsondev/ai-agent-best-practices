@@ -61,17 +61,18 @@ Verify with `rg -n 'oldName'` returning nothing, not by re-reading files.
 - Move code in one commit's worth of work, change it in another. A diff that both moves and
   edits shows as wholesale deletion and addition.
 
-## 5. Check statically after every step, then ask for a wide run
+## 5. Grep after every step, then ask for a wide run
 
-Typecheck and lint after **each** mechanical step, not just at the end — that's what keeps a
-broken intermediate state from compounding, and it's cheap.
+`rg -n 'oldName'` after **each** mechanical step, not just at the end. For a rename that's a
+complete check — nothing left to find *is* the proof — and it stops a broken intermediate
+state from compounding, for about 50 tokens a step.
 
 Then ask for a wider run than usual. Structural changes reach places targeted tests don't, so
 this is the one case where the **full suite** is worth the developer's time rather than a
 subset:
 
-> Rename is done across 14 files; `rg -n 'oldName'` returns nothing and `mypy` is clean.
-> Worth running the whole suite rather than just `tests/auth` — a rename touches things the
+> Rename is done across 14 files; `rg -n 'oldName'` now returns nothing. Worth running `mypy`
+> and then the whole suite rather than just `tests/auth` — a rename touches things the
 > targeted tests won't reach.
 
 ## 6. Report

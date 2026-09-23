@@ -1,7 +1,7 @@
 # AGENTS.md
 
 <!--
-  Loaded on every turn of every session. Hard ceiling: one page (~1000 tokens).
+  Loaded on every turn of every session. Keep it to one page.
   Include only what an agent would otherwise get wrong, or get right expensively.
   Delete every section you don't fill in — an empty heading is pure cost.
   Guidance: repo/writing-agents-md.md · Commands per stack: reference/stack-commands.md

@@ -20,16 +20,19 @@ first and mention it after.
 
 ## Upgrading
 
-Find the current constraint, what's actually resolved, and what's latest — three cheap
-lookups, no file reads:
+Find the current constraint from the manifest — a local read, no network:
 
 ```sh
-jq -r '.dependencies["pkg"]' package.json; npm view pkg version     # JS/TS
-rg -n 'pkg' pyproject.toml; pip index versions pkg                   # Python
-rg -n 'pkg' go.mod; go list -m -versions example.com/pkg             # Go
-rg -n 'pkg' Cargo.toml; cargo search pkg --limit 1                   # Rust
-rg -n -A2 'artifactId>pkg' pom.xml                                   # Java
+jq -r '.dependencies["pkg"]' package.json     # JS/TS
+rg -n 'pkg' pyproject.toml                    # Python
+rg -n 'pkg' go.mod                            # Go
+rg -n 'pkg' Cargo.toml                        # Rust
+rg -n -A2 'artifactId>pkg' pom.xml            # Java
 ```
+
+For what's *latest*, ask rather than query. `npm view`, `pip index versions`,
+`go list -m -versions`, and `cargo search` are network calls to a registry, and the developer
+can answer in one line — or already knows, because that's why they asked.
 
 Read the **migration guide or breaking-changes section**, not the whole changelog. Then
 measure your own exposure — this list *is* the work:
@@ -52,13 +55,15 @@ If it's large, upgrade in one pass and verify in one pass — don't interleave.
 
 ## Verify
 
-Run the **typecheck and the build** — those are static and they're yours. A transitive change
-can break anything, so this is the one case where the developer should run the **full suite**
-rather than a subset. Hand them the command, per stack in
-[`../reference/stack-commands.md`](../reference/stack-commands.md).
+Your side is the exposure list from the greps above, re-read against the breaking-changes
+notes. Little else here is checkable by reading, which makes the handoff unusually
+load-bearing — say so rather than implying more confidence than you have.
 
-Ask them to boot the app once too. Dependency breakage often shows at module load, where unit
-tests never look ([`../practices/verification.md`](../practices/verification.md)).
+A transitive change can break anything, so hand over more than usual: **install, then
+typecheck, then build, then the full suite**, in that order, per stack in
+[`../reference/stack-commands.md`](../reference/stack-commands.md). Ask them to boot the app
+once too — dependency breakage often shows at module load, where unit tests never look
+([`../practices/verification.md`](../practices/verification.md)).
 
 ## Report
 

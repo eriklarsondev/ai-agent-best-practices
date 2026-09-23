@@ -1,25 +1,34 @@
 # Running things
 
-**Open when:** you're about to execute anything — a test, the app, Docker, a browser.
-**Skip if:** it's a static check (compile, typecheck, lint, grep). Those are always yours.
+**Open when:** you're about to execute anything at all.
+**Skip if:** you're searching or reading — `rg`, a file, a diff. Those are always yours.
 
 ## The line
 
 | Yours | The developer's |
 | --- | --- |
-| Compile, typecheck, lint | Tests, at every level |
-| Grep, search, read | The app, dev servers, Docker |
+| Grep, search, read | Tests, at every level |
 | **Writing** tests | **Running** tests |
-| Reading the diff | Clicking through the UI |
+| Reading your own diff back | Compilers, type checkers, linters, formatters |
+| Naming what you couldn't check | The app, dev servers, Docker, the UI |
 
-Static analysis is deterministic, bounded, and needs no environment. Execution needs env
-vars, fixtures, services, seed data, and ports — all of which you're guessing at, and any of
-which can fail for reasons that have nothing to do with your change.
+Search is deterministic and bounded: you know what `rg -n 'name\('` will cost before you run
+it. Execution isn't. It needs env vars, fixtures, services, seed data, and ports you're
+guessing at, and the size of its output is decided by how badly it fails — which is exactly
+when you can least afford it.
 
 ## Never
 
 **Tests.** No `pytest`, `go test`, `npm test`, `mvn test`, `cargo test` — unit, integration,
 or E2E. Write them, name the command, hand it over.
+
+**The toolchain.** No `tsc`, `mypy`, `go build`, `cargo check`, `eslint`, `ruff`, `prettier`,
+`gradle`, `npm install`. This is the half that looks obviously yours — cheap, deterministic,
+no environment needed — and it's the one that actually drains a session. A single type error
+cascades into thousands of lines you cannot un-read; a build runs 10k–100k tokens; and the
+developer's editor flagged the same error before you finished writing the line. Worse, it
+invites the loop: check, patch, check again, four times, none of it evidence of anything.
+Write the code and hand over the command.
 
 **The app.** No dev servers, no long-lived processes, no `curl` against something you
 started.
@@ -46,7 +55,8 @@ state, and can take a state lock. Ask for the output and interpret it —
 
 ## Why, beyond cost
 
-- **They re-verify anyway.** Nothing you run removes a step from their side.
+- **They re-verify anyway.** Nothing you run removes a step from their side — not the suite,
+  and not the type check either. You pay for it twice and they pay for it once regardless.
 - **Self-graded green is weak evidence.** If one pass wrote the code, wrote the assertion,
   and ran them against each other, passing mostly proves internal consistency. An independent
   runner is what makes it evidence.
@@ -55,11 +65,8 @@ state, and can take a state lock. Ask for the output and interpret it —
 
 ## What to do instead
 
-Hand over a click path or a command precise enough that they don't have to reconstruct it —
-see [`handoff.md`](handoff.md). Name the risk you couldn't check:
-
-> Worth clicking through: Settings → Billing with an expired card. The error banner is new,
-> and the retry button should stay disabled until the form re-validates.
+Hand over a click path or a command precise enough that they don't have to reconstruct it,
+and name the risk you couldn't check. Shape and worked examples: [`handoff.md`](handoff.md).
 
 ## The one exception
 

@@ -23,10 +23,10 @@ rg --files -g 'justfile' -g 'Taskfile*' -g 'Makefile' -g 'mise.toml'
 
 ## The narrow commands
 
-The **compile/typecheck** and **format/lint** columns are yours to run. The
-**test-one-file** column is what you *hand to the developer* — you write tests, they run
-them ([`../practices/verification.md`](../practices/verification.md)). Give them the exact
-invocation; don't make them derive it.
+**Every column here is a command you hand over, not one you run**
+([`../practices/verification.md`](../practices/verification.md)). This file exists so the
+handoff contains an exact invocation rather than one the developer has to derive — order them
+cheapest-failure-first: typecheck, lint, then the single test file.
 
 | Stack | Test one file / one test | Compile / typecheck | Format · Lint |
 | --- | --- | --- | --- |
@@ -43,8 +43,8 @@ invocation; don't make them derive it.
 | **Elixir** | `mix test path/x_test.exs:42` | `mix compile --warnings-as-errors` | `mix format` · `mix credo` |
 | **Swift** | `swift test --filter TestName` | `swift build` | `swift-format -i` · `swiftlint` |
 
-Bound the output as always: `2>&1 | head -30` for compilers (they fail fast, errors on top),
-`2>&1 | tail -20` for test runners (verdict at the bottom).
+If the developer explicitly asks you to run one, bound it: `2>&1 | head -30` for compilers
+(they fail fast, errors on top), `2>&1 | tail -20` for test runners (verdict at the bottom).
 
 ## Dependencies
 

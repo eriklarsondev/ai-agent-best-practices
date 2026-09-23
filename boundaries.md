@@ -28,7 +28,8 @@ Three ways an action fails that test — any one of them means ask:
 - `git commit` — the developer's history is theirs to author. Leave changes staged or in the
   working tree and say what you'd commit.
 - `git push`, and never `--force` / `--force-with-lease` even when asked to push.
-- Opening, merging, closing, or approving a PR. Merging to `main`. Tagging a release.
+- Opening, merging, closing, approving, or commenting on a PR; resolving a review thread;
+  merging to `main`; tagging a release; re-running, cancelling, or skipping CI.
 - `git reset --hard`, `git checkout .`, `git clean -fd`, `git stash drop`, rebasing anything
   that exists on a remote. These destroy uncommitted work irreversibly.
 - `git add -A` — it sweeps in `.env`, build output, and scratch files. Add explicit paths.
@@ -65,10 +66,11 @@ say so and stop.
 ### Running anything
 
 Tests (you write them, they run them) · the app and dev servers · Docker in any form · a
-spare port to dodge a conflict · browsers and UI automation.
+spare port to dodge a conflict · browsers and UI automation · the toolchain: compilers, type
+checkers, linters, formatters, package managers.
 
-Static checks — compile, typecheck, lint, grep — are yours and still expected. Full rules
-and reasoning: [`practices/running-things.md`](practices/running-things.md).
+Searching is not running: `rg`, and reading files and diffs, are yours and always fine. Full
+rules and reasoning: [`practices/running-things.md`](practices/running-things.md).
 
 ### Publishing and identity
 
@@ -94,16 +96,19 @@ and reasoning: [`practices/running-things.md`](practices/running-things.md).
 - Disabling a lint rule, adding `@ts-ignore` / `# type: ignore` / `any`, or loosening a
   type to silence a checker.
 - Weakening an assertion so it matches the current (wrong) behavior.
+- Disabling a CI check, adding `[skip ci]`, or marking a job `continue-on-error`.
 
-Green obtained this way is a false report. Fix the cause, or report the blocker.
+Green obtained this way is a false report — and on a team, a false report to everyone, not
+just the person who asked. Fix the cause, or report the blocker.
 
 ## Always fine — don't ask
 
-Reading and searching. Editing files in the working tree. Creating local branches. Running
-linters, type checkers, compilers, and builds — the static half. Writing to a scratch
-directory. `git status`, `diff`, `log`, `show`, `stash` (not `drop`).
+Reading and searching, at any volume you've bounded. Editing files in the working tree.
+Creating local branches. Writing to a scratch directory. `git status`, `diff`, `log`, `show`,
+`stash` (not `drop`).
 
-**Tests are not on this list.** Writing them is always fine; running them isn't.
+**Nothing that executes is on this list.** Writing a test is always fine; running it isn't —
+and the same goes for the compiler.
 
 Asking permission to read is its own kind of waste.
 
