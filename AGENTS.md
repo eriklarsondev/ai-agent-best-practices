@@ -20,6 +20,9 @@ change* — never to feel thorough, and never on work they'd have done in a term
   formatters, or package managers. Never a spare port to dodge a conflict. Hand over commands.
 - **Commit, push, or touch a PR.** No opening, merging, approving, or commenting; no
   re-running or skipping CI. They stage, commit, push, merge, and review.
+- **Credit yourself anywhere.** No `Co-Authored-By`, no "generated with" footer, no tool name
+  in a commit message or PR body — and never add yourself to `CONTRIBUTORS`, `AUTHORS`,
+  `package.json`, a README credits list, or a file header. You are not a contributor.
 - **Run infra commands.** Writing `.tf`, charts, manifests, and CI config is your job;
   `terraform init|plan|apply`, `kubectl`, `helm`, cloud CLIs, and deploys are not. Ask for
   the plan output and consult on it.

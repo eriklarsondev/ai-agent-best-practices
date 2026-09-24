@@ -45,6 +45,12 @@ Leave the change in the working tree, unstaged. Hand over the exact commands ins
   scratch files.
 - Check before you commit: `git --no-pager diff --cached --stat`.
 - One logical change per commit. The message says *why*; the diff already says what.
+- **Never co-author.** No `Co-Authored-By` trailer, no "generated with" footer, no tool name,
+  no emoji byline — nothing that puts you in the commit. The commit is the developer's alone,
+  and their history shouldn't advertise how the code was written. Same for PR descriptions.
+- **Never add yourself as a contributor.** Not to `CONTRIBUTORS`/`AUTHORS`, not to
+  `package.json` or `pyproject.toml` metadata, not to a README credits section, not as an
+  `@author` in a file header. Authorship belongs to the people on the project.
 - Still don't push. Approval to commit is not approval to push.
 
 ## Never without confirming
